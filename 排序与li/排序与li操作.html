@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>阶段二，任务18</title>
+<link rel="stylesheet" type="text/css" href="task2-5.css"/>	
+<style>
+  .grid {
+      display: inline-block;
+      width: 25px;
+      background-color: #00B5AD;
+      font-size: 16px;
+      color: white;
+      text-align: center;
+      margin: 1px;
+      font-family: "Microsoft YaHei";
+      transition: 800ms ease-in-out;
+    }
+    .grid:hover{
+      background-color: #08A19A;
+    }
+    {
+      display: -webkit-flex;
+      display: flex;
+      align-items: flex-end;
+      margin-top: 140px;
+      height: 400px;
+    }
+	.wrap{margin-left: 30%;margin-top:100px;}
+	.button{
+		margin-right: 15px;
+		background-color:#ddd;
+	    border-radius: 6px;
+	    border:none;
+	    
+	}
+	.button:hover{
+		background-color: #dee;
+	}
+
+
+	ul{margin-left: 28%;}
+	li{ 
+		display:inline-block;
+		margin-right: 2px;
+		background-color: red;
+		line-height:40px;
+		text-align: center;
+		color:white;
+		padding-left:8px;
+		padding-right:8px;
+		margin-top: 5px;
+	}
+	li:hover{background-color:#da6;}
+</style>
+</head>
+<body>
+<div class="wrap">
+<input type="text/password" id="tbx"/>
+<input type="submit" value="左侧入" id="leftin_btn"  class="button"/>
+<input type="submit" value="右侧入" id="rightin_btn" class="button"/>
+<input type="submit" value="左侧出" id="leftout_btn"  class="button"/>
+<input type="submit" value="右侧出" id="rightout_btn" class="button"/>
+<input type="submit" value="排序" id="sort" class="button"/>	
+</div>
+<div id="display">
+	<ul></ul>
+</div>
+<script type="text/javascript">
+	
+	var tbx=document.getElementById("tbx");
+	var display=document.getElementById("display");
+	var ul=document.getElementsByTagName("ul")[0];
+	var items=ul.getElementsByTagName("li");
+	var btns=document.getElementsByClassName("button");
+	var arr=[];
+	btns[0].onclick=leftIn;
+	btns[1].onclick=rightIn;
+	btns[2].onclick=leftOut;
+	btns[3].onclick=rightOut;
+	btns[4].onclick=sort;
+	function  checkNum(num){
+				if(isNaN(num)||num<10||num>100){
+						alert('请输入10-100之间的整数');
+						return false;
+				  }
+				if(items.length>60){
+						alert('最多只能输入60次有效数字！');
+						return false;
+				  }
+				  return true;
+			  }	
+	function leftIn(){
+			var num=tbx.value.trim();
+			if(checkNum(num)){
+				arr.unshift(num);
+				rander();
+                tbx.value='';
+			}
+		  }
+	 function  rightIn(){
+		var num=tbx.value.trim();
+		if(checkNum(num)){
+		  arr.push(num);
+		  rander();
+		  tbx.value='';
+		}	  
+	  }
+	function leftOut(){
+			 alert(arr.shift());
+	         arr.shift(); 
+	         rander();
+		  }
+	function rightOut(){
+		alert(arr.pop());
+		arr.pop();
+		rander();
+	  }
+    function sort(){
+			arr.sort(function(a,b){return a-b;});
+			var divs = document.getElementsByClassName("grid");
+			  for (var i = 0; i < arr.length; i++) {
+			    divs[i].style.height = arr[i] * 5 + "px";
+			    divs[i].style.lineHeight = arr[i] * 5 + "px";
+             } 
+		  }
+	function rander(){
+           
+		  //清除container
+		  while (ul.hasChildNodes()) {
+		    ul.removeChild(ul.firstChild);
+		  }
+		  for (var i = 0; i < arr.length; i++) {
+		    var li = document.createElement("li");
+		    li.className = "grid";
+		    li.style.height = arr[i] * 5 + "px";
+		    li.style.lineHeight = arr[i] * 5 + "px";
+		    ul.appendChild(li);
+		  }
+		}	  
+	/*function leftIn(){
+		var tbx_v=tbx.value.trim();
+		if(items.length<10){
+			if((/^[1-9.0-9]+$/).test(tbx_v)&&tbx_v<=100&&tbx_>=10){
+				var li=document.createElement("li");
+				li.style.height=tbx_v+"px";
+				ul.insertBefore(li,ul.firstChild);
+				li.onclick = function(){
+		              this.parentNode.removeChild(this);
+		            }
+		        tbx.value=null;
+		}else{
+			alert("请输入数字，靴靴")
+			return false;
+		}
+		
+	}else{
+           alert("最多只能输入10个！");
+           return false;
+
+	}
+		
+		
+	}
+	btns[1].onclick=rightIn;
+	function rightIn(){
+		var tbx_v=tbx.value.trim();
+		if(items.length<10){
+				if((/^[1-9.0-9]+$/).test(tbx_v)&&tbx_v<100&&tbx_>10){
+					var li=document.createElement("li");
+					li.style.height=tbx_v+"px";
+					ul.appendChild(li);
+					li.onclick = function(){
+			            ul.removeChild(this);
+		            }
+			        tbx.value=null;
+			}
+			    else{
+				   alert("请输入数字，靴靴")
+		           return false;
+			}
+		}else{
+			   alert("最多只能输入10个！");
+               return false;
+		}
+		
+		
+	}
+	btns[2].onclick=function(){
+	    if(ul.hasChildNodes()){
+	    	alert("被删除的数字是："+ul.firstChild.innerHTML);
+	    	ul.removeChild(ul.firstChild);
+	    }
+	    else{
+	    	alert("还没有可以被删除的数字，请插入数字后再删除，靴靴");
+	    	return false;
+	    }
+
+	}
+	btns[3].onclick=function(){
+		if(ul.hasChildNodes()){
+	    	alert("被删除的数字是："+ul.lastChild.innerHTML);
+	    	ul.removeChild(ul.lastChild);
+	    }
+	    else{
+	    	alert("还没有可以被删除的数字，请插入数字后再删除，靴靴");
+	    	return false;
+	    }
+	}*/
+ 
+</script>	
+</body>
+</html>
